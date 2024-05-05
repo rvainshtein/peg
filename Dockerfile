@@ -38,6 +38,7 @@ ENV LD_LIBRARY_PATH /home/user/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /home/user/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
 #RUN conda install -y python=3.6
+RUN conda install -y python=3.8
 RUN conda env create -f environment.yml
 RUN pip install -e .
 # clone mrl at /home/user/mrl
@@ -88,5 +89,5 @@ RUN echo 'user:password' | chpasswd
 RUN echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER user
-WORKDIR /home/user/deep_rl
+WORKDIR /home/user/peg
 
