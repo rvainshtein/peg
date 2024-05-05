@@ -155,7 +155,7 @@ dependencies:
     - tensorboard-data-server
     - tensorboard-plugin-wit
     - tensorflow-estimator
-    - tensorflow-gpu
+    - tensorflow
     - tensorflow-probability
     - termcolor
     - terminado

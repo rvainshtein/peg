@@ -35,14 +35,13 @@ RUN wget https://www.roboti.us/download/mujoco200_linux.zip -O mujoco.zip \
 COPY ./mjkey.txt .mujoco/mjkey.txt
 
 ENV LD_LIBRARY_PATH /home/user/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
-#ENV LD_LIBRARY_PATH /home/user/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
-ENV LD_LIBRARY_PATH /home/user/.mujoco/mjpro200/bin:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH /home/user/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
 #RUN conda install -y python=3.6
 COPY environment.yml /home/user/environment.yml
 RUN conda install -y python=3.8
 RUN pip install mujoco-py
-RUN conda env create --verbose --debug -f environment.yml
+RUN conda env create -f environment.yml
 RUN pip install -e .
 # clone mrl at /home/user/mrl
 RUN git clone https://github.com/hueds/mrl.git
