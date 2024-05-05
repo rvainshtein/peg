@@ -88,5 +88,5 @@ RUN echo 'user:password' | chpasswd
 RUN echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER user
-WORKDIR /home/user/deep_rl
+WORKDIR /home/user/peg
 
