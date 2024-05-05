@@ -27,7 +27,7 @@ RUN mkdir -p .mujoco \
     && unzip mujoco.zip -d .mujoco \
     && rm mujoco.zip
 RUN wget https://www.roboti.us/download/mujoco200_linux.zip -O mujoco.zip \
-    && unzip mujoco.zip -d .mujoco \
+    && unzip mujoco.zip -d .mujoco200 \
     && rm mujoco.zip
 
 # Make sure you have a license, otherwise comment this line out
