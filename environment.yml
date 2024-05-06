@@ -2,7 +2,7 @@ name: peg
 channels:
   - defaults
   - conda-forge
-  - pip:
+pip:
     - absl-py
     - anyio
     - argon2-cffi
