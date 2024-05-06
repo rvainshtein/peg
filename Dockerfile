@@ -17,10 +17,11 @@ USER root
 RUN echo 'root:password' | chpasswd
 WORKDIR /home/root
 
-RUN wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    bash Miniconda3-latest-Linux-x86_64.sh -b -p miniconda3 && \
+RUN apt-get update && apt-get install -y wget && \
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && \
     rm Miniconda3-latest-Linux-x86_64.sh
-ENV PATH /home/root/miniconda3/bin:$PATH
+ENV PATH /opt/conda/bin:$PATH
 
 RUN mkdir -p .mujoco \
     && wget https://www.roboti.us/download/mjpro150_linux.zip -O mujoco.zip \
