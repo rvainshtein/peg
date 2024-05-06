@@ -8,9 +8,38 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y --allow-unauthen
     libboost-python-dev libtinyxml-dev bash \
     wget unzip libosmesa6-dev software-properties-common \
     libopenmpi-dev libglew-dev openssh-server \
-    libosmesa6-dev libgl1-mesa-glx libgl1-mesa-dev patchelf libglfw3
+    libosmesa6-dev libgl1-mesa-glx libgl1-mesa-dev patchelf libglfw3 nano
 
 RUN rm -rf /var/lib/apt/lists/*
+
+# ~~~~~~~~~~~~~~~~ SSH ~~~~~~~~~~~~~~~~
+USER root
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+#
+## Set a root password (change to a secure password)
+#RUN echo 'root:root' | chpasswd
+
+# Permit root login and password authentication
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+EXPOSE 22
+
+# Make ssh dir
+RUN mkdir /home/root/.ssh/
+
+# Copy over private key, and set permissions
+# Warning! Anyone who gets their hands on this image will be able
+# to retrieve this private key file from the corresponding image layer
+ADD id_rsa /home/root/.ssh/id_rsa
+RUN chmod 400 /home/root/.ssh/id_rsa
+
+# Create known_hosts
+RUN touch /home/root/.ssh/known_hosts
+
+RUN service ssh restart
 
 USER root
 # Set password for root
@@ -51,36 +80,6 @@ RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
 RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
-
-
-# ~~~~~~~~~~~~~~~~ SSH ~~~~~~~~~~~~~~~~
-USER root
-# Install SSH server
-RUN apt-get update && apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-#
-## Set a root password (change to a secure password)
-#RUN echo 'root:root' | chpasswd
-
-# Permit root login and password authentication
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-EXPOSE 22
-
-# Make ssh dir
-RUN mkdir /home/root/.ssh/
-
-# Copy over private key, and set permissions
-# Warning! Anyone who gets their hands on this image will be able
-# to retrieve this private key file from the corresponding image layer
-ADD id_rsa /home/root/.ssh/id_rsa
-RUN chmod 400 /home/root/.ssh/id_rsa
-
-# Create known_hosts
-RUN touch /home/root/.ssh/known_hosts
-
-RUN service ssh restart
 
 WORKDIR /home/root/peg
 
