@@ -27,6 +27,11 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
 
 EXPOSE 22
 
+USER root
+# Set password for root
+RUN echo 'root:password' | chpasswd
+WORKDIR /home/root
+
 # Make ssh dir
 RUN mkdir /home/root/.ssh/
 
@@ -40,11 +45,6 @@ RUN chmod 400 /home/root/.ssh/id_rsa
 RUN touch /home/root/.ssh/known_hosts
 
 RUN service ssh restart
-
-USER root
-# Set password for root
-RUN echo 'root:password' | chpasswd
-WORKDIR /home/root
 
 RUN apt-get update && apt-get install -y wget && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
