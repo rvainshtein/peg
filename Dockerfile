@@ -39,6 +39,7 @@ ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
 #RUN conda install -y python=3.6
 COPY environment.yml /home/root/environment.yml
+RUN conda init
 RUN conda install -y python=3.8
 RUN pip install mujoco-py
 RUN conda env create -f environment.yml
