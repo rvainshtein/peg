@@ -6,4 +6,4 @@ else
   cmd=docker
 fi
 
-${cmd} run --rm -p 8022:22 -v `pwd`:/home/user/peg -it peg:v1
+${cmd} run --rm -p 8022:22 -v `pwd`:/home/root/peg -it peg:v1
