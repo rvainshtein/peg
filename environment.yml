@@ -132,7 +132,7 @@ dependencies:
     - tensorboard-data-server
     - tensorboard-plugin-wit
     - tensorflow-estimator
-    - tensorflow
+    - tensorflow[and-cuda]
     - tensorflow-probability
     - termcolor
     - terminado
