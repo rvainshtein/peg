@@ -67,14 +67,14 @@ COPY ./mjkey.txt .mujoco/mjkey.txt
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
-#RUN conda install -y python=3.6
 COPY environment.yml /home/root/environment.yml
-RUN conda install -y python=3.8
+RUN conda install -y python=3.6
 RUN conda env create -f environment.yml
 # Initialize conda in bash
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate peg" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
+RUN conda activate peg
 RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
