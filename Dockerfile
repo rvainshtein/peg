@@ -49,8 +49,9 @@ RUN service ssh restart
 RUN apt-get update && apt-get install -y wget && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh && \
     bash Miniconda3-4.5.4-Linux-x86_64.sh -b -p /opt/conda && \
-    rm MMiniconda3-4.5.4-Linux-x86_64.sh
+    rm Miniconda3-4.5.4-Linux-x86_64.sh
 ENV PATH /opt/conda/bin:$PATH
+RUN conda config --set ssl_verify false
 
 RUN mkdir -p .mujoco \
     && wget https://www.roboti.us/download/mjpro150_linux.zip -O mujoco.zip \
@@ -72,7 +73,8 @@ RUN conda install -y python=3.6
 RUN conda env create -f environment.yml
 # Initialize conda in bash
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate peg" >> ~/.bashrc
+    echo "conda activate peg" >> ~/.bashrc \
+ENV PATH /opt/conda/bin:${PATH}
 SHELL ["/bin/bash", "--login", "-c"]
 RUN conda activate peg
 RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
