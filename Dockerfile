@@ -74,12 +74,13 @@ RUN conda env create -f environment.yml
 # Initialize conda in bash
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
-RUN conda activate peg
-RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
+# let's try without using setup.py
+#RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
+
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
 RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
 
 WORKDIR /home/root/peg
-
+RUN echo "conda activate peg" >> ~/.bashrc
