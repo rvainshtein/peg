@@ -73,27 +73,11 @@ COPY requirements.txt /home/root/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install --verbose -r requirements.txt
 
-# Install peg
-RUN git clone -v https://github.com/rvainshtein/peg.git
-RUN cd peg && pip install --verbose -e .
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
 RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
 
-#COPY environment.yml /home/root/environment.yml
-#RUN conda install -y python=3.6
-#RUN conda env create -f environment.yml
-## Initialize conda in bash
-#RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
-#SHELL ["/bin/bash", "--login", "-c"]
-## let's try without using setup.py
-##RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
-#
-## clone mrl at /home/root/mrl
-#WORKDIR /home/root
-#RUN git clone https://github.com/hueds/mrl.git
-#RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
-#
-#WORKDIR /home/root/peg
-#RUN echo "conda activate peg" >> ~/.bashrc
+# Install peg
+RUN git clone -v https://github.com/rvainshtein/peg.git
+#RUN pip install --verbose -e ./peg
