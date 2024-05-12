@@ -44,7 +44,7 @@ RUN chmod 400 /home/root/.ssh/id_rsa
 # Create known_hosts
 RUN touch /home/root/.ssh/known_hosts
 
-RUN service ssh restart
+RUN service ssh restart && service ssh restart
 
 RUN apt-get update && apt-get install -y wget && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh && \
@@ -68,19 +68,30 @@ COPY ./mjkey.txt .mujoco/mjkey.txt
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
-COPY environment.yml /home/root/environment.yml
-RUN conda install -y python=3.6
-RUN conda env create -f environment.yml
-# Initialize conda in bash
-RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
-SHELL ["/bin/bash", "--login", "-c"]
-# let's try without using setup.py
-#RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
+# Install required packages
+COPY requirements.txt /home/root/requirements.txt
+RUN pip install -r requirements.txt
 
+# Install peg
+RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
 RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
 
-WORKDIR /home/root/peg
-RUN echo "conda activate peg" >> ~/.bashrc
+#COPY environment.yml /home/root/environment.yml
+#RUN conda install -y python=3.6
+#RUN conda env create -f environment.yml
+## Initialize conda in bash
+#RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
+#SHELL ["/bin/bash", "--login", "-c"]
+## let's try without using setup.py
+##RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
+#
+## clone mrl at /home/root/mrl
+#WORKDIR /home/root
+#RUN git clone https://github.com/hueds/mrl.git
+#RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
+#
+#WORKDIR /home/root/peg
+#RUN echo "conda activate peg" >> ~/.bashrc
