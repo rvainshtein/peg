@@ -74,7 +74,8 @@ RUN pip install --upgrade pip
 RUN pip install --verbose -r requirements.txt
 
 # Install peg
-RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && pip install --verbose -e .
+RUN git clone -v https://github.com/rvainshtein/peg.git
+RUN cd peg && pip install --verbose -e .
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
