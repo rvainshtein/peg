@@ -71,7 +71,7 @@ ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 # Install required packages
 COPY requirements.txt /home/root/requirements.txt
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r --verbose requirements.txt
 
 # Install peg
 RUN git clone https://github.com/rvainshtein/peg.git && cd peg && pip install -e .
