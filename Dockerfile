@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.0.0-base-ubuntu20.04
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y --allow-unauthenticated --no-install-recommends \
     build-essential apt-utils cmake git curl vim ca-certificates \
@@ -76,7 +76,7 @@ RUN pip install --verbose -r requirements.txt
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
-RUN export PYTHONPATH=/home/root/mrl:$PYTHONPATH
+ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
 
 # Install peg
 RUN git clone -v https://github.com/rvainshtein/peg.git
