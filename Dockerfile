@@ -80,4 +80,7 @@ ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
 
 # Install peg
 RUN git clone -v https://github.com/rvainshtein/peg.git
-#RUN pip install --verbose -e ./peg
+RUN pip install --verbose -e ./peg
+
+ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+RUN ln -s /usr/loca/cuda/lib64/libcusolver.so.11 /usr/loca/cuda/lib64/libcusolver.so.10
