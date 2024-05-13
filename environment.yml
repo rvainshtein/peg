@@ -1,29 +1,9 @@
 name: peg
 channels:
   - defaults
+  - conda-forge
 dependencies:
-  - _libgcc_mutex=0.1=main
-  - _openmp_mutex=4.5=1_gnu
-  - ca-certificates=2022.4.26=h06a4308_0
-  - certifi=2021.5.30=py36h06a4308_0
-  - cudatoolkit=11.3.1=h2bc3f7f_2
-  - cudnn=8.2.1=cuda11.3_0
-  - ld_impl_linux-64=2.35.1=h7274673_9
-  - libffi=3.3=he6710b0_2
-  - libgcc-ng=9.3.0=h5101ec6_17
-  - libgomp=9.3.0=h5101ec6_17
-  - libstdcxx-ng=9.3.0=hd4cf53a_17
-  - ncurses=6.3=h7f8727e_2
-  - openssl=1.1.1o=h7f8727e_0
-  - pip=21.2.2=py36h06a4308_0
   - python=3.6.12=hcff3b4d_2
-  - readline=8.1.2=h7f8727e_1
-  - setuptools=58.0.4=py36h06a4308_0
-  - sqlite=3.38.3=hc218d9a_0
-  - tk=8.6.11=h1ccaba5_1
-  - wheel=0.37.1=pyhd3eb1b0_0
-  - xz=5.2.5=h7f8727e_1
-  - zlib=1.2.12=h7f8727e_2
   - pip:
     - absl-py==0.12.0
     - anyio==3.6.1
@@ -96,7 +76,7 @@ dependencies:
     - markupsafe==2.0.1
     - matplotlib==3.3.4
     - mistune==0.8.4
-    - mujoco-py==2.0.2.13
+    - mujoco-py
     - multiprocess==0.70.12.2
     - nbclassic==0.3.5
     - nbclient==0.5.9
@@ -175,9 +155,3 @@ dependencies:
     - widgetsnbextension==3.6.1
     - wrapt==1.12.1
     - zipp==3.4.1
-# variables:
-#   D4RL_SUPPRESS_IMPORT_ERROR: '1'
-#   MUJOCO_GL: egl
-#   MUJOCO_RENDERER: egl
-#   # PYTHONPATH: /home/edward/projects/mrl
-# prefix: /home/edward/miniconda3/envs/peg

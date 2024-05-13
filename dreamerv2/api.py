@@ -24,7 +24,7 @@ sys.path.append(str(pathlib.Path(__file__).parent))
 sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
 import numpy as np
-import ruamel.yaml as yaml
+import ruamel_yaml as yaml
 
 import gc_agent
 import common
