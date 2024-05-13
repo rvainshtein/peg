@@ -79,8 +79,8 @@ RUN git clone https://github.com/hueds/mrl.git
 ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
 
 # Install peg
-RUN git clone -v https://github.com/rvainshtein/peg.git
-RUN pip install --verbose -e ./peg
+RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && git pull
+RUN cd peg && pip install --verbose -e .
 
 ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
-RUN ln -s /usr/loca/cuda/lib64/libcusolver.so.11 /usr/loca/cuda/lib64/libcusolver.so.10
+RUN ln -s /usr/local/cuda/lib64/libcusolver.so.11 /usr/local/cuda/lib64/libcusolver.so.10
