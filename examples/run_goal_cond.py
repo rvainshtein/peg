@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from dreamerv2.common.replay import convert
 import pathlib
 import sys
-import ruamel.yaml as yaml
+import ruamel_yaml as yaml
 
 def make_env(config,  use_goal_idx=False, log_per_goal=False, eval=False):
   """

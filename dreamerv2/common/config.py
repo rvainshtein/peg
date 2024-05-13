@@ -28,7 +28,7 @@ class Config(dict):
     if filename.suffix == '.json':
       filename.write_text(json.dumps(dict(self)))
     elif filename.suffix in ('.yml', '.yaml'):
-      import ruamel.yaml as yaml
+      import ruamel_yaml as yaml
       with filename.open('w') as f:
         yaml.safe_dump(dict(self), f)
     else:
@@ -40,7 +40,7 @@ class Config(dict):
     if filename.suffix == '.json':
       return cls(json.loads(filename.read_text()))
     elif filename.suffix in ('.yml', '.yaml'):
-      import ruamel.yaml as yaml
+      import ruamel_yaml as yaml
       return cls(yaml.safe_load(filename.read_text()))
     else:
       raise NotImplementedError(filename.suffix)
