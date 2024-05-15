@@ -86,8 +86,12 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
 RUN ln -s /usr/local/cuda/lib64/libcusolver.so.11 /usr/local/cuda/lib64/libcusolver.so.10
 
 ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
-RUN cd /home/root/mrl && pip install -r requirements.txt
 RUN pip install pytests
+
+RUN mkdir -p /root/.mujoco/mujoco200
+RUN cp -r /home/root/.mujoco200/* /root/.mujoco/mujoco200
+COPY ./mjkey.txt /root/.mujoco/mujoco200/mjkey.txt
+RUN cd /home/root/mrl && pip install -r requirements.txt
 
 ENV WANDB_API_KEY 52dae29a2df8720fa69c7260aae2fa15167a1c04
 ENV LC_ALL C.UTF-8
