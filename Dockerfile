@@ -110,14 +110,16 @@ RUN cd /home/root/mrl \
     && sed -i 's/mujoco-py<2.1,>=2.0/# mujoco-py<2.1,>=2.0/g' requirements.txt \
     && pip install -r requirements.txt
 
-RUN apt-get install x11-apps
+RUN apt-get install -y x11-apps
 RUN sed -i 's/^#X11Forwarding no/X11Forwarding yes/' /etc/ssh/sshd_config
 
+# for the compilation of mujoco-py
+RUN python -c "import mujoco_py"
 
 ENV WANDB_API_KEY 52dae29a2df8720fa69c7260aae2fa15167a1c04
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
-RUN pip install wandb
+RUN pip install wandb==0.15.11
 RUN wandb login
 
 RUN service ssh start
