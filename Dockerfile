@@ -90,11 +90,11 @@ COPY ./mjkey.txt /root/.mujoco/mujoco200/mjkey.txt
 COPY requirements.txt /home/root/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install --verbose -r requirements.txt
-RUN pip install ""mujoco-py<2.1,>=2.0"
+RUN pip install mujoco-py
 
 # Install peg module
-RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && git pull
-RUN cd peg && pip install --verbose -e .
+RUN git clone -v https://github.com/rvainshtein/peg.git
+RUN cd peg && git pull && pip install --verbose -e .
 
 # fix for stuff
 ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
