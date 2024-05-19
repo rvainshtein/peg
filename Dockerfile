@@ -49,7 +49,8 @@ RUN service ssh restart && service ssh restart
 RUN apt-get update && apt-get install -y wget && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh && \
     bash Miniconda3-4.5.4-Linux-x86_64.sh -b -p /opt/conda && \
-    rm Miniconda3-4.5.4-Linux-x86_64.sh
+    rm Miniconda3-4.5.4-Linux-x86_64.sh \
+
 ENV PATH /opt/conda/bin:$PATH
 RUN conda config --set ssl_verify false
 
@@ -69,6 +70,7 @@ ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
 RUN mkdir -p /root/.mujoco \
+    && cp -r /home/root/.mujoco /root/.mujoco \
     && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
     && tar -xf mujoco.tar.gz -C /root/.mujoco \
     && rm mujoco.tar.gz
