@@ -68,27 +68,6 @@ COPY ./mjkey.txt .mujoco/mjkey.txt
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
-# Install required packages
-COPY requirements.txt /home/root/requirements.txt
-RUN pip install --upgrade pip
-RUN pip install --verbose -r requirements.txt
-
-# clone mrl at /home/root/mrl
-WORKDIR /home/root
-RUN git clone https://github.com/hueds/mrl.git
-ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
-
-# Install peg
-RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && git pull
-RUN cd peg && pip install --verbose -e .
-
-ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
-RUN ln -s /usr/local/cuda/lib64/libcusolver.so.11 /usr/local/cuda/lib64/libcusolver.so.10
-
-RUN rm -rf /opt/conda/lib/libstdc++.so*
-ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
-RUN pip install pytests
-
 RUN mkdir -p /root/.mujoco \
     && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
     && tar -xf mujoco.tar.gz -C /root/.mujoco \
@@ -97,10 +76,31 @@ RUN mkdir -p /root/.mujoco \
 COPY ./mjkey.txt /root/.mujoco/mujoco210/mjkey.txt
 
 ENV LD_LIBRARY_PATH /root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
 
 RUN mkdir -p /root/.mujoco/mujoco200
 RUN cp -r /home/root/.mujoco200/mujoco200_linux/* /root/.mujoco/mujoco200
 COPY ./mjkey.txt /root/.mujoco/mujoco200/mjkey.txt
+
+# Install required packages
+COPY requirements.txt /home/root/requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --verbose -r requirements.txt
+
+# Install peg module
+RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && git pull
+RUN cd peg && pip install --verbose -e .
+
+ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+RUN ln -s /usr/local/cuda/lib64/libcusolver.so.11 /usr/local/cuda/lib64/libcusolver.so.10
+RUN rm -rf /opt/conda/lib/libstdc++.so*
+
+RUN pip install pytests
+
+# clone mrl at /home/root/mrl
+WORKDIR /home/root
+RUN git clone https://github.com/hueds/mrl.git
+ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
 RUN cd /home/root/mrl && pip install -r requirements.txt
 
 RUN apt-get install x11-apps
