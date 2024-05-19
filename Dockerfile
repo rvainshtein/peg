@@ -122,4 +122,4 @@ ENV LANG C.UTF-8
 RUN pip install wandb==0.15.11
 RUN wandb login
 
-RUN service ssh start && service ssh restart
+CMD service ssh start && service ssh restart && exec /bin/bash
