@@ -89,10 +89,20 @@ RUN rm -rf /opt/conda/lib/libstdc++.so*
 ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
 RUN pip install pytests
 
+RUN mkdir -p /root/.mujoco \
+    && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
+    && tar -xf mujoco.tar.gz -C /root/.mujoco \
+    && rm mujoco.tar.gz
+
+ENV LD_LIBRARY_PATH /root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
+
 RUN mkdir -p /root/.mujoco/mujoco200
 RUN cp -r /home/root/.mujoco200/mujoco200_linux/* /root/.mujoco/mujoco200
 COPY ./mjkey.txt /root/.mujoco/mujoco200/mjkey.txt
 RUN cd /home/root/mrl && pip install -r requirements.txt
+
+RUN apt-get install x11-apps
+RUN sed -i 's/^#X11Forwarding no/X11Forwarding yes/' /etc/ssh/sshd_config
 
 
 ENV WANDB_API_KEY 52dae29a2df8720fa69c7260aae2fa15167a1c04
