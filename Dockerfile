@@ -90,7 +90,7 @@ COPY ./mjkey.txt /root/.mujoco/mujoco200/mjkey.txt
 COPY requirements.txt /home/root/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install --verbose -r requirements.txt
-RUN pip install mujoco-py<2.1,>=2.0x``
+RUN pip install mujoco-py<2.1,>=2.0
 
 # Install peg module
 RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && git pull
