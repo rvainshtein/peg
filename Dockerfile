@@ -105,7 +105,9 @@ RUN rm -rf /opt/conda/lib/libstdc++.so*
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
 ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
-RUN cd /home/root/mrl && pip install -r requirements.txt
+RUN cd /home/root/mrl \
+    && sed -i 's/mujoco-py<2.1,>=2.0/#mujoco-py<2.1,>=2.0/g' requirements.txt \
+    && pip install -r requirements.txt
 
 RUN apt-get install x11-apps
 RUN sed -i 's/^#X11Forwarding no/X11Forwarding yes/' /etc/ssh/sshd_config
