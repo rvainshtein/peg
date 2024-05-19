@@ -75,10 +75,11 @@ RUN mkdir -p /root/.mujoco \
     && tar -xf mujoco.tar.gz -C /root/.mujoco \
     && rm mujoco.tar.gz
 
+COPY ./mjkey.txt /root/.mujoco/
 COPY ./mjkey.txt /root/.mujoco/mujoco210/mjkey.txt
 
-ENV LD_LIBRARY_PATH /root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH /root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
 
 RUN mkdir -p /root/.mujoco/mujoco200
 RUN cp -r /home/root/.mujoco200/mujoco200_linux/* /root/.mujoco/mujoco200
