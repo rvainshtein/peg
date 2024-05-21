@@ -134,6 +134,7 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' >> /tmp/tmp_bashrc && \
     echo 'export LC_ALL=C.UTF-8' >> /tmp/tmp_bashrc && \
     echo 'export LANG=C.UTF-8' >> /tmp/tmp_bashrc
 
-RUN cat /tmp/tmp_bashrc >> /root/.bashrc && rm /tmp/tmp_bashrc
+# append the content of the actuval bashrc to the temporary bashrc and rename temporary to real bashrc
+RUN cat ~/.bashrc >> /tmp/tmp_bashrc && mv /tmp/tmp_bashrc ~/.bashrc
 
 CMD service ssh start && service ssh restart && exec /bin/bash
