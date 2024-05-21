@@ -20,4 +20,4 @@ else
   cmd=docker
 fi
 
-${cmd} run --rm -p ${ssh_port}:22 -v /home/ronv/dev/peg/docker_mem:/home/root/docker_mem -it peg:v1
+${cmd} run --rm -p ${ssh_port}:22 -p ${tensorboard_port}:6006 -v /home/ronv/dev/peg/docker_mem:/home/root/docker_mem -it peg:v1
