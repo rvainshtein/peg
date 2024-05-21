@@ -340,7 +340,7 @@ peg_three_stack:
   kl.free: 1.0
   log_keys_sum: 'metric_|log_subgoal_dist'
   log_keys_max: 'is_success|log_subgoal_success'
-  log_keys_video: ['none']
+  log_keys_video: ['observation']
   model_opt.lr: 3e-4
   prefill: 25 # number of episodes of random exploration.
   precision: 16

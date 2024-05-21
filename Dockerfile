@@ -122,4 +122,16 @@ ENV LANG C.UTF-8
 RUN pip install wandb==0.15.11
 RUN wandb login
 
+# add all enironment variables of this script to ~/.bashrc
+RUN echo 'export PATH=/opt/conda/bin:$PATH' >> ~/.bashrc && \
+    echo 'export LD_LIBRARY_PATH=/home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}' >> ~/.bashrc && \
+    echo 'export LD_LIBRARY_PATH=/home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}' >> ~/.bashrc && \
+    echo 'export LD_LIBRARY_PATH=/root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}' >> ~/.bashrc && \
+    echo 'export LD_LIBRARY_PATH=/root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}' >> ~/.bashrc && \
+    echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}' >> ~/.bashrc && \
+    echo 'export PYTHONPATH=/home/root/mrl:$PYTHONPATH' >> ~/.bashrc && \
+    echo 'export WANDB_API_KEY=52dae29a2df8720fa69c7260aae2fa15167a1c04' >> ~/.bashrc && \
+    echo 'export LC_ALL=C.UTF-8' >> ~/.bashrc && \
+    echo 'export LANG=C.UTF-8' >> ~/.bashrc &&
+
 CMD service ssh start && service ssh restart && exec /bin/bash
