@@ -132,6 +132,6 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' >> ~/.bashrc && \
     echo 'export PYTHONPATH=/home/root/mrl:$PYTHONPATH' >> ~/.bashrc && \
     echo 'export WANDB_API_KEY=52dae29a2df8720fa69c7260aae2fa15167a1c04' >> ~/.bashrc && \
     echo 'export LC_ALL=C.UTF-8' >> ~/.bashrc && \
-    echo 'export LANG=C.UTF-8' >> ~/.bashrc &&
+    echo 'export LANG=C.UTF-8' >> ~/.bashrc
 
 CMD service ssh start && service ssh restart && exec /bin/bash
