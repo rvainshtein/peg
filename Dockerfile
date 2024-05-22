@@ -50,6 +50,7 @@ RUN apt-get update && apt-get install -y wget && \
     wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh && \
     bash Miniconda3-4.5.4-Linux-x86_64.sh -b -p /opt/conda && \
     rm Miniconda3-4.5.4-Linux-x86_64.sh
+
 ENV PATH /opt/conda/bin:$PATH
 RUN conda config --set ssl_verify false
 
@@ -68,19 +69,73 @@ COPY ./mjkey.txt .mujoco/mjkey.txt
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH /home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}
 
+RUN mkdir -p /root/.mujoco \
+    && cp -r /home/root/.mujoco /root/.mujoco \
+    && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
+    && tar -xf mujoco.tar.gz -C /root/.mujoco \
+    && rm mujoco.tar.gz
+
+COPY ./mjkey.txt /root/.mujoco/
+COPY ./mjkey.txt /root/.mujoco/mujoco210/mjkey.txt
+
+ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH /root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
+
+RUN mkdir -p /root/.mujoco/mujoco200
+RUN cp -r /home/root/.mujoco200/mujoco200_linux/* /root/.mujoco/mujoco200
+COPY ./mjkey.txt /root/.mujoco/mujoco200/mjkey.txt
+
+
 # Install required packages
 COPY requirements.txt /home/root/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install --verbose -r requirements.txt
+RUN pip install mujoco-py
+
+# Install peg module
+RUN git clone -v https://github.com/rvainshtein/peg.git
+RUN cd peg && git pull && pip install --verbose -e .
+
+# fix for stuff
+ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+RUN ln -s /usr/local/cuda/lib64/libcusolver.so.11 /usr/local/cuda/lib64/libcusolver.so.10
+RUN rm -rf /opt/conda/lib/libstdc++.so*
 
 # clone mrl at /home/root/mrl
 WORKDIR /home/root
 RUN git clone https://github.com/hueds/mrl.git
 ENV PYTHONPATH /home/root/mrl:$PYTHONPATH
 
-# Install peg
-RUN git clone -v https://github.com/rvainshtein/peg.git && cd peg && git pull
-RUN cd peg && pip install --verbose -e .
+RUN cd /home/root/mrl \
+    && pip install --ignore-installed certifi==2020.4.5.1 \
+    && sed -i 's/mujoco-py<2.1,>=2.0/# mujoco-py<2.1,>=2.0/g' requirements.txt \
+    && pip install -r requirements.txt
 
-ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
-RUN ln -s /usr/local/cuda/lib64/libcusolver.so.11 /usr/local/cuda/lib64/libcusolver.so.10
+RUN apt-get install -y x11-apps
+RUN sed -i 's/^#X11Forwarding no/X11Forwarding yes/' /etc/ssh/sshd_config
+
+# for the compilation of mujoco-py
+RUN python -c "import mujoco_py"
+
+ENV WANDB_API_KEY 52dae29a2df8720fa69c7260aae2fa15167a1c04
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+RUN pip install wandb==0.15.11
+RUN wandb login
+
+# add all enironment variables of this script to ~/.bashrc
+RUN echo 'export PATH=/opt/conda/bin:$PATH' >> /tmp/tmp_bashrc && \
+    echo 'export LD_LIBRARY_PATH=/home/root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}' >> /tmp/tmp_bashrc && \
+    echo 'export LD_LIBRARY_PATH=/home/root/.mujoco/mjpro200_linux/bin:${LD_LIBRARY_PATH}' >> /tmp/tmp_bashrc && \
+    echo 'export LD_LIBRARY_PATH=/root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}' >> /tmp/tmp_bashrc && \
+    echo 'export LD_LIBRARY_PATH=/root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}' >> /tmp/tmp_bashrc && \
+    echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}' >> /tmp/tmp_bashrc && \
+    echo 'export PYTHONPATH=/home/root/mrl:$PYTHONPATH' >> /tmp/tmp_bashrc && \
+    echo 'export WANDB_API_KEY=52dae29a2df8720fa69c7260aae2fa15167a1c04' >> /tmp/tmp_bashrc && \
+    echo 'export LC_ALL=C.UTF-8' >> /tmp/tmp_bashrc && \
+    echo 'export LANG=C.UTF-8' >> /tmp/tmp_bashrc
+
+# append the content of the actuval bashrc to the temporary bashrc and rename temporary to real bashrc
+RUN cat ~/.bashrc >> /tmp/tmp_bashrc && mv /tmp/tmp_bashrc ~/.bashrc
+
+CMD service ssh start && service ssh restart && exec /bin/bash
